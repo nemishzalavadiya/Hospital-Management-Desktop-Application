@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="HospitalManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Medicine_details">
+    <Key>
+      <PropertyRef Name="Medicine_Id" />
+    </Key>
+    <Property Name="Medicine_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="price" Type="int" Nullable="false" />
+    <Property Name="Expiry_date" Type="date" Nullable="false" />
+    <Property Name="Mfg_date" Type="date" Nullable="false" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Patient_Appoinment">
+    <Key>
+      <PropertyRef Name="Appoinment_Id" />
+    </Key>
+    <Property Name="Appoinment_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Start_date" Type="date" Nullable="false" />
+    <Property Name="Patient_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Appoinment_date" Type="date" Nullable="false" />
+    <Property Name="Address" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Mobile_no" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Doctor_id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Patient_record">
+    <Key>
+      <PropertyRef Name="Patient_Id" />
+    </Key>
+    <Property Name="Patient_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="disease" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Doctor_id" Type="int" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="100" />
+    <Property Name="Appoinment_id" Type="int" Nullable="false" />
+    <Property Name="Discharge_date" Type="date" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Designation" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Patient_Appoinment_ToTable">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="Patient_Appoinment" Type="Self.Patient_Appoinment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Patient_Appoinment">
+        <PropertyRef Name="Doctor_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Patient_record_ToTable">
+    <End Role="Patient_Appoinment" Type="Self.Patient_Appoinment" Multiplicity="1" />
+    <End Role="Patient_record" Type="Self.Patient_record" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient_Appoinment">
+        <PropertyRef Name="Appoinment_Id" />
+      </Principal>
+      <Dependent Role="Patient_record">
+        <PropertyRef Name="Appoinment_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Patient_record_ToTable_1">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="Patient_record" Type="Self.Patient_record" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Patient_record">
+        <PropertyRef Name="Doctor_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="HospitalManagementModelStoreContainer">
+    <EntitySet Name="Medicine_details" EntityType="Self.Medicine_details" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Patient_Appoinment" EntityType="Self.Patient_Appoinment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Patient_record" EntityType="Self.Patient_record" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Patient_Appoinment_ToTable" Association="Self.FK_Patient_Appoinment_ToTable">
+      <End Role="User" EntitySet="User" />
+      <End Role="Patient_Appoinment" EntitySet="Patient_Appoinment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Patient_record_ToTable" Association="Self.FK_Patient_record_ToTable">
+      <End Role="Patient_Appoinment" EntitySet="Patient_Appoinment" />
+      <End Role="Patient_record" EntitySet="Patient_record" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Patient_record_ToTable_1" Association="Self.FK_Patient_record_ToTable_1">
+      <End Role="User" EntitySet="User" />
+      <End Role="Patient_record" EntitySet="Patient_record" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

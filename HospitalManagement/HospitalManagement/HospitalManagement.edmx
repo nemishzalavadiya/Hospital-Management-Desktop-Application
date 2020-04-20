@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="HospitalManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Medicine_details">
+          <Key>
+            <PropertyRef Name="Medicine_Id" />
+          </Key>
+          <Property Name="Medicine_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="price" Type="int" Nullable="false" />
+          <Property Name="Expiry_date" Type="date" Nullable="false" />
+          <Property Name="Mfg_date" Type="date" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Patient_Appoinment">
+          <Key>
+            <PropertyRef Name="Appoinment_Id" />
+          </Key>
+          <Property Name="Appoinment_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Start_date" Type="date" Nullable="false" />
+          <Property Name="Patient_name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Appoinment_date" Type="date" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Mobile_no" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Doctor_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Patient_record">
+          <Key>
+            <PropertyRef Name="Patient_Id" />
+          </Key>
+          <Property Name="Patient_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="disease" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Doctor_id" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="100" />
+          <Property Name="Appoinment_id" Type="int" Nullable="false" />
+          <Property Name="Discharge_date" Type="date" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Designation" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Patient_Appoinment_ToTable">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Patient_Appoinment" Type="Self.Patient_Appoinment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Patient_Appoinment">
+              <PropertyRef Name="Doctor_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Patient_record_ToTable">
+          <End Role="Patient_Appoinment" Type="Self.Patient_Appoinment" Multiplicity="1" />
+          <End Role="Patient_record" Type="Self.Patient_record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient_Appoinment">
+              <PropertyRef Name="Appoinment_Id" />
+            </Principal>
+            <Dependent Role="Patient_record">
+              <PropertyRef Name="Appoinment_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Patient_record_ToTable_1">
+          <End Role="User" Type="Self.User" Multiplicity="1" />
+          <End Role="Patient_record" Type="Self.Patient_record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Patient_record">
+              <PropertyRef Name="Doctor_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HospitalManagementModelStoreContainer">
+          <EntitySet Name="Medicine_details" EntityType="Self.Medicine_details" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Patient_Appoinment" EntityType="Self.Patient_Appoinment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Patient_record" EntityType="Self.Patient_record" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Patient_Appoinment_ToTable" Association="Self.FK_Patient_Appoinment_ToTable">
+            <End Role="User" EntitySet="User" />
+            <End Role="Patient_Appoinment" EntitySet="Patient_Appoinment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Patient_record_ToTable" Association="Self.FK_Patient_record_ToTable">
+            <End Role="Patient_Appoinment" EntitySet="Patient_Appoinment" />
+            <End Role="Patient_record" EntitySet="Patient_record" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Patient_record_ToTable_1" Association="Self.FK_Patient_record_ToTable_1">
+            <End Role="User" EntitySet="User" />
+            <End Role="Patient_record" EntitySet="Patient_record" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HospitalManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Designation" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Patient_Appoinment" Relationship="HospitalManagementModel.FK_Patient_Appoinment_ToTable1" FromRole="User" ToRole="Patient_Appoinment" />
+          <NavigationProperty Name="Patient_record" Relationship="HospitalManagementModel.FK_Patient_record_ToTable_11" FromRole="User" ToRole="Patient_record" />
+        </EntityType>
+        <EntityContainer Name="HospitalManagementEntity" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="Medicine_details" EntityType="HospitalManagementModel.Medicine_details" />
+          <EntitySet Name="Patient_Appoinment" EntityType="HospitalManagementModel.Patient_Appoinment" />
+          <EntitySet Name="Patient_record" EntityType="HospitalManagementModel.Patient_record" />
+          <AssociationSet Name="FK_Patient_record_ToTable" Association="HospitalManagementModel.FK_Patient_record_ToTable">
+            <End Role="Patient_Appoinment" EntitySet="Patient_Appoinment" />
+            <End Role="Patient_record" EntitySet="Patient_record" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Patient_Appoinment_ToTable1" Association="HospitalManagementModel.FK_Patient_Appoinment_ToTable1">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Patient_Appoinment" EntitySet="Patient_Appoinment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Patient_record_ToTable_11" Association="HospitalManagementModel.FK_Patient_record_ToTable_11">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Patient_record" EntitySet="Patient_record" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Medicine_details">
+          <Key>
+            <PropertyRef Name="Medicine_Id" />
+          </Key>
+          <Property Name="Medicine_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="price" Type="Int32" Nullable="false" />
+          <Property Name="Expiry_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Mfg_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Patient_Appoinment">
+          <Key>
+            <PropertyRef Name="Appoinment_Id" />
+          </Key>
+          <Property Name="Appoinment_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Start_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Patient_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Appoinment_date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile_no" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Doctor_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Patient_record" Relationship="HospitalManagementModel.FK_Patient_record_ToTable" FromRole="Patient_Appoinment" ToRole="Patient_record" />
+          <NavigationProperty Name="User" Relationship="HospitalManagementModel.FK_Patient_Appoinment_ToTable1" FromRole="Patient_Appoinment" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Patient_record">
+          <Key>
+            <PropertyRef Name="Patient_Id" />
+          </Key>
+          <Property Name="Patient_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="disease" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Doctor_id" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Appoinment_id" Type="Int32" Nullable="false" />
+          <Property Name="Discharge_date" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Patient_Appoinment" Relationship="HospitalManagementModel.FK_Patient_record_ToTable" FromRole="Patient_record" ToRole="Patient_Appoinment" />
+          <NavigationProperty Name="User" Relationship="HospitalManagementModel.FK_Patient_record_ToTable_11" FromRole="Patient_record" ToRole="User" />
+        </EntityType>
+        <Association Name="FK_Patient_record_ToTable">
+          <End Type="HospitalManagementModel.Patient_Appoinment" Role="Patient_Appoinment" Multiplicity="1" />
+          <End Type="HospitalManagementModel.Patient_record" Role="Patient_record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient_Appoinment">
+              <PropertyRef Name="Appoinment_Id" />
+            </Principal>
+            <Dependent Role="Patient_record">
+              <PropertyRef Name="Appoinment_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Patient_Appoinment_ToTable1">
+          <End Type="HospitalManagementModel.User" Role="User" Multiplicity="1" />
+          <End Type="HospitalManagementModel.Patient_Appoinment" Role="Patient_Appoinment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Patient_Appoinment">
+              <PropertyRef Name="Doctor_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Patient_record_ToTable_11">
+          <End Type="HospitalManagementModel.User" Role="User" Multiplicity="1" />
+          <End Type="HospitalManagementModel.Patient_record" Role="Patient_record" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Patient_record">
+              <PropertyRef Name="Doctor_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HospitalManagementModelStoreContainer" CdmEntityContainer="HospitalManagementEntity">
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="HospitalManagementModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Medicine_details">
+            <EntityTypeMapping TypeName="HospitalManagementModel.Medicine_details">
+              <MappingFragment StoreEntitySet="Medicine_details">
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Mfg_date" ColumnName="Mfg_date" />
+                <ScalarProperty Name="Expiry_date" ColumnName="Expiry_date" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Medicine_Id" ColumnName="Medicine_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Patient_Appoinment">
+            <EntityTypeMapping TypeName="HospitalManagementModel.Patient_Appoinment">
+              <MappingFragment StoreEntitySet="Patient_Appoinment">
+                <ScalarProperty Name="Doctor_id" ColumnName="Doctor_id" />
+                <ScalarProperty Name="Mobile_no" ColumnName="Mobile_no" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Appoinment_date" ColumnName="Appoinment_date" />
+                <ScalarProperty Name="Patient_name" ColumnName="Patient_name" />
+                <ScalarProperty Name="Start_date" ColumnName="Start_date" />
+                <ScalarProperty Name="Appoinment_Id" ColumnName="Appoinment_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Patient_record">
+            <EntityTypeMapping TypeName="HospitalManagementModel.Patient_record">
+              <MappingFragment StoreEntitySet="Patient_record">
+                <ScalarProperty Name="Discharge_date" ColumnName="Discharge_date" />
+                <ScalarProperty Name="Appoinment_id" ColumnName="Appoinment_id" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Doctor_id" ColumnName="Doctor_id" />
+                <ScalarProperty Name="disease" ColumnName="disease" />
+                <ScalarProperty Name="Patient_Id" ColumnName="Patient_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
